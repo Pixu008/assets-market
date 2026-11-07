@@ -49,9 +49,10 @@
                     {% if asset.precio_clp == 0 %}GRATIS{% else %}${{ asset.precio_clp }} CLP{% endif %}
                 </h6>
             </div>
-            <div class="card-footer bg-transparent border-top-0">
-                <!-- Este botón luego lo conectaremos a la sesión (carrito) -->
-                <button class="btn btn-outline-primary w-100">Ver Detalles</button>
+            
+            <!-- Botón actualizado para Editar -->
+            <div class="card-footer bg-transparent border-top-0 d-grid gap-2">
+                <a href="{% url 'marketplace:editar_asset' asset.codigo_slug %}" class="btn btn-outline-primary">Editar Asset</a>
             </div>
         </div>
     </div>
