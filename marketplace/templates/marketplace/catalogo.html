@@ -1,0 +1,81 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Catálogo - VRC Assets{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Catálogo de Assets 3D</h1>
+
+<!-- Formulario de Filtros y Búsqueda -->
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="q" class="form-control" placeholder="Buscar por título, código o descripción..." value="{{ query|default_if_none:'' }}">
+    </div>
+    <div class="col-md-3">
+        <select name="categoria" class="form-select">
+            <option value="">Todas las categorías</option>
+            {% for cat in categorias %}
+                <option value="{{ cat.id }}" {% if categoria_seleccionada == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="orden" class="form-select">
+            <option value="">Ordenar por defecto</option>
+            <option value="menor_precio" {% if orden_seleccionado == 'menor_precio' %}selected{% endif %}>Menor Precio</option>
+            <option value="mayor_precio" {% if orden_seleccionado == 'mayor_precio' %}selected{% endif %}>Mayor Precio</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </div>
+</form>
+
+<!-- Tarjetas de Bootstrap (Cards) -->
+<div class="row">
+    {% for asset in page_obj %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            {% if asset.imagen_preview %}
+                <img src="{{ asset.imagen_preview.url }}" class="card-img-top" alt="{{ asset.titulo }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 200px;">Sin imagen</div>
+            {% endif %}
+            
+            <div class="card-body">
+                <span class="badge bg-info mb-2">{{ asset.categoria.nombre }}</span>
+                <h5 class="card-title">{{ asset.titulo }}</h5>
+                <p class="card-text text-truncate">{{ asset.descripcion }}</p>
+                <h6 class="text-success fw-bold">
+                    {% if asset.precio_clp == 0 %}GRATIS{% else %}${{ asset.precio_clp }} CLP{% endif %}
+                </h6>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+                <!-- Este botón luego lo conectaremos a la sesión (carrito) -->
+                <button class="btn btn-outline-primary w-100">Ver Detalles</button>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p class="text-muted">No se encontraron assets con esos filtros.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Paginador -->
+{% if page_obj.has_other_pages %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if categoria_seleccionada %}&categoria={{ categoria_seleccionada }}{% endif %}{% if orden_seleccionado %}&orden={{ orden_seleccionado }}{% endif %}">Anterior</a></li>
+        {% endif %}
+        
+        <li class="page-item active"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+        
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if categoria_seleccionada %}&categoria={{ categoria_seleccionada }}{% endif %}{% if orden_seleccionado %}&orden={{ orden_seleccionado }}{% endif %}">Siguiente</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}{{ titulo_pagina }} - VRC Assets{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm mt-4 mb-5">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">{{ titulo_pagina }}</h4>
+            </div>
+            <div class="card-body">
+                <!-- El enctype es obligatorio para subir imágenes y zips -->
+                <form method="POST" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-bold">
+                                {{ field.label }}
+                            </label>
+                            
+                            {{ field }}
+                            
+                            {% if field.help_text %}
+                                <div class="form-text text-muted">{{ field.help_text }}</div>
+                            {% endif %}
+                            
+                            <!-- Mostrar errores de validación de los clean_() -->
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback d-block text-danger">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar Asset</button>
+                        <a href="{% url 'marketplace:catalogo' %}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
