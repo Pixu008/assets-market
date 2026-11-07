@@ -27,13 +27,17 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Bolsa (0)</a>
+                        <!-- Enlace dinámico a la sesión de la bolsa -->
+                        <a class="nav-link text-warning fw-bold" href="{% url 'marketplace:ver_bolsa' %}">
+                            Bolsa ({% if request.session.bolsa %}{{ request.session.bolsa|length }}{% else %}0{% endif %})
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
+    <!-- Sistema de Mensajes (Feedback UI) -->
     <div class="container">
         {% if messages %}
             {% for message in messages %}

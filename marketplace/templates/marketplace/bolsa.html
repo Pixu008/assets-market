@@ -1,0 +1,64 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Bolsa de Assets - VRC Assets{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Mi Bolsa de Assets</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Assets Seleccionados</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if items %}
+                    <ul class="list-group list-group-flush">
+                        {% for item in items %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <div>
+                                    <h6 class="mb-1">{{ item.titulo }}</h6>
+                                    <small class="text-muted">ID: {{ item.recurso_id }}</small>
+                                </div>
+                                <span class="badge bg-success rounded-pill text-white p-2">
+                                    {% if item.precio_clp == 0 %}GRATIS{% else %}${{ item.precio_clp }} CLP{% endif %}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="p-5 text-center text-muted">
+                        <p class="mb-0">Tu bolsa está vacía.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mt-4 mt-md-0">
+        <div class="card shadow-sm border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Resumen</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="fw-bold">Cantidad de Assets:</span>
+                    <span>{{ cantidad }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="fw-bold fs-5">Total a Pagar:</span>
+                    <span class="text-success fw-bold fs-5">${{ total }} CLP</span>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success btn-lg" {% if not items %}disabled{% endif %}>Proceder a la Descarga</button>
+                    <a href="{% url 'marketplace:catalogo' %}" class="btn btn-outline-secondary">Seguir Explorando</a>
+                    {% if items %}
+                        <a href="{% url 'marketplace:vaciar_bolsa' %}" class="btn btn-outline-danger mt-2 text-decoration-none">Vaciar Bolsa</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

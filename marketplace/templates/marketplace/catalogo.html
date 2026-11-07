@@ -50,9 +50,14 @@
                 </h6>
             </div>
             
-            <!-- Botón actualizado para Editar -->
-            <div class="card-footer bg-transparent border-top-0 d-grid gap-2">
-                <a href="{% url 'marketplace:editar_asset' asset.codigo_slug %}" class="btn btn-outline-primary">Editar Asset</a>
+            <!-- Controles de Acción -->
+            <div class="card-footer bg-transparent border-top-0">
+                <div class="d-grid gap-2">
+                    <!-- Botón para Session HTTP (Bolsa) -->
+                    <a href="{% url 'marketplace:agregar_a_bolsa' asset.id %}" class="btn btn-success">Agregar a la Bolsa</a>
+                    <!-- Botón CRUD (Update) -->
+                    <a href="{% url 'marketplace:editar_asset' asset.codigo_slug %}" class="btn btn-outline-primary btn-sm">Editar Asset</a>
+                </div>
             </div>
         </div>
     </div>
